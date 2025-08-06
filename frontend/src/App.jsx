@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css'; // Para estilos globais e layout
+import './App.css';
 
 import ParticipationForm from './components/ParticipationForm';
 import ParticipationTable from './components/ParticipationTable';
 import ParticipationChart from './components/ParticipationChart';
 
-const API_URL = 'http://localhost:5000/api/participants'; // URL do nosso back-end
+const API_URL = 'http://localhost:5000/api/participants';
 
 function App() {
   const [participants, setParticipants] = useState([]);
   const [error, setError] = useState('');
 
-  // Função para buscar os dados da API
   const fetchData = async () => {
     try {
       const response = await axios.get(API_URL);
@@ -23,20 +22,16 @@ function App() {
     }
   };
 
-  // useEffect para buscar os dados quando o componente montar
   useEffect(() => {
     fetchData();
   }, []);
 
   const handleAddParticipant = async (participant) => {
     try {
-      // Limpa erros antigos
       setError('');
       await axios.post(API_URL, participant);
-      // Se sucesso, busca os dados atualizados
       fetchData();
     } catch (err) {
-      // Pega a mensagem de erro da API (erro 400)
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {
