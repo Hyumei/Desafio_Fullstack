@@ -1,6 +1,6 @@
 # Desafio Fullstack
 
-Este é um projeto fullstack que exibe uma tabela e um gráfico de participação em formato de pizza, com um formulário para adicionar novos dados. Desenvolvido como um desafio técnico da empresa Cotabox.
+Este é um projeto fullstack que exibe uma tabela e um gráfico de participação, com um formulário para adicionar novos dados. Desenvolvido como um desafio técnico da empresa Cotabox.
 
 ---
 
