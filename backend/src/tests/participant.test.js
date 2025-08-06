@@ -1,16 +1,6 @@
 const request = require('supertest');
-const app = require('../../server'); // Supondo que seu server.js exporte o app
-const mongoose = require('mongoose');
+const app = require('../../app');
 const Participant = require('../models/participant.model');
-
-beforeAll(async () => {
-  const url = 'mongodb://127.0.0.1/test_db';
-  await mongoose.connect(url, { useNewUrlParser: true });
-});
-
-afterEach(async () => {
-  await Participant.deleteMany();
-});
 
 describe('Participants API', () => {
 
@@ -34,28 +24,25 @@ describe('Participants API', () => {
         lastName: 'Doe'
       });
     expect(res.statusCode).toEqual(400);
-    expect(res.body).toHaveProperty('mensagem:', 'Todos os campos são obrigatórios.');
+    expect(res.body).toHaveProperty('message', 'All fields are required.');
   });
-  
+
   it('Deve falhar se a participação total exceder 100 (erro 400)', async () => {
-    await Participant.create([
-        { firstName: 'User', lastName: 'A', participation: 50 },
-        { firstName: 'User', lastName: 'B', participation: 40 }
-    ]);
+    await Participant.create({ firstName: 'User', lastName: 'A', participation: 95 });
 
     const res = await request(app)
       .post('/api/participants')
       .send({
         firstName: 'User',
         lastName: 'C',
-        participation: 20
+        participation: 10
       });
       
     expect(res.statusCode).toEqual(400);
-    expect(res.body.message).toContain('exceed 100%');
+    expect(res.body.message).toContain('excederia 100%');
   });
 
-  it('should fetch all participants', async () => {
+  it('Deve buscar todos os participantes', async () => {
     await Participant.create({ firstName: 'Test', lastName: 'User', participation: 5 });
     
     const res = await request(app).get('/api/participants');
